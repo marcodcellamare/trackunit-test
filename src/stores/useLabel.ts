@@ -6,13 +6,13 @@ interface LabelInterface {
 	label: string;
 	position: LabelPositionType;
 	setLabel: (label: string) => void;
-	setPostion: (position: LabelPositionType) => void;
+	setPosition: (position: LabelPositionType) => void;
 }
 
 const useLabel = create<LabelInterface>((set) => ({
 	label: '',
-	position: 'center-top',
+	position: 'center',
 	setLabel: (label) => set({ label }),
-	setPostion: (position) => set({ position }),
+	setPosition: (position) => set({ position }),
 }));
 export default useLabel;
