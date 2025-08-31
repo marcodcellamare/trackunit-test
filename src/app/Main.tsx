@@ -3,6 +3,8 @@ import useSearch from '../stores/useSearch';
 import { useEffect } from 'react';
 import useGiphy from '../hooks/useGiphy';
 import Image from './Image';
+import { CircleAlertIcon, CirclePlayIcon, XIcon } from 'lucide-react';
+import useLabel from '../stores/useLabel';
 
 interface MainProps {
 	className?: string;
@@ -10,22 +12,39 @@ interface MainProps {
 
 const Main = ({ className }: MainProps) => {
 	const query = useSearch((state) => state.query);
+	const setQuery = useSearch((state) => state.setQuery);
 	const images = useSearch((state) => state.images);
+	const setImages = useSearch((state) => state.setImages);
+	const setLabel = useLabel((state) => state.setLabel);
 	const { getImages } = useGiphy();
 
 	useEffect(() => {
 		if (query) getImages();
 	}, [query, getImages]);
 
+	const handleReset = () => {
+		setLabel('');
+		setImages([]);
+		setQuery('');
+	};
+
 	return (
 		<main className={classNames(['relative', className])}>
 			<div className='absolute inset-0 my-5 overflow-x-hidden overflow-y-auto'>
 				{query && (
-					<h3 className='text-lg mb-5'>
-						Search: <strong>{query}</strong>
+					<h3 className='flex gap-1 items-center text-lg mb-5'>
+						<span>
+							Search: <strong>{query}</strong>
+						</span>
+						<button
+							type='button'
+							className='btn btn-xs btn-error'
+							onClick={handleReset}>
+							<XIcon className='text-svg' />
+						</button>
 					</h3>
 				)}
-				{images && (
+				{images.length > 0 ? (
 					<div className='grid gap-5 grid-cols-1 lg:grid-cols-3'>
 						{images.map((image, k) => (
 							<Image
@@ -34,6 +53,24 @@ const Main = ({ className }: MainProps) => {
 							/>
 						))}
 					</div>
+				) : (
+					<h2
+						className={classNames([
+							'text-4xl flex gap-2 items-center',
+							query ? 'text-error' : 'text-primary',
+						])}>
+						{query ? (
+							<>
+								<CircleAlertIcon className='text-svg' />
+								No results
+							</>
+						) : (
+							<>
+								<CirclePlayIcon className='text-svg' />
+								Start your search
+							</>
+						)}
+					</h2>
 				)}
 			</div>
 		</main>
