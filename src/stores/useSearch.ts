@@ -1,17 +1,30 @@
 import { create } from 'zustand';
 
 interface SearchInterface {
-	page: number;
+	offset: number;
+	total: number;
 	query: string;
 	images: string[];
+	setOffsetPrev: () => void;
+	setOffsetNext: () => void;
+	setTotal: (total: number) => void;
 	setQuery: (query: string) => void;
 	setImages: (images: string[]) => void;
 }
 
 const useSearch = create<SearchInterface>((set) => ({
-	page: 0,
+	offset: 0,
+	total: 0,
 	query: '',
 	images: [],
+	setOffsetPrev: () =>
+		set((state) => ({ offset: state.offset > 0 ? state.offset - 1 : 0 })),
+	setOffsetNext: () =>
+		set((state) => ({
+			offset:
+				state.offset < state.total - 1 ? state.offset + 1 : state.total,
+		})),
+	setTotal: (total) => set({ total }),
 	setQuery: (query) => set({ query }),
 	setImages: (images) => set({ images }),
 }));

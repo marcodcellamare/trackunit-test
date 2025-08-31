@@ -15,7 +15,9 @@ const Main = ({ className }: MainProps) => {
 	const setQuery = useSearch((state) => state.setQuery);
 	const images = useSearch((state) => state.images);
 	const setImages = useSearch((state) => state.setImages);
+	const setTotal = useSearch((state) => state.setTotal);
 	const setLabel = useLabel((state) => state.setLabel);
+
 	const { getImages } = useGiphy();
 
 	useEffect(() => {
@@ -25,6 +27,7 @@ const Main = ({ className }: MainProps) => {
 	const handleReset = () => {
 		setLabel('');
 		setImages([]);
+		setTotal(0);
 		setQuery('');
 	};
 
@@ -45,7 +48,7 @@ const Main = ({ className }: MainProps) => {
 					</h3>
 				)}
 				{images.length > 0 ? (
-					<div className='grid gap-5 grid-cols-1 lg:grid-cols-3'>
+					<div className='grid gap-5 grid-cols-1 md:grid-cols-3'>
 						{images.map((image, k) => (
 							<Image
 								key={k}

@@ -3,20 +3,22 @@ import { useCallback } from 'react';
 import useSearch from '../stores/useSearch';
 
 const useGiphy = () => {
-	const page = useSearch((state) => state.page);
+	const offset = useSearch((state) => state.offset);
 	const query = useSearch((state) => state.query);
 	const setImages = useSearch((state) => state.setImages);
+	const setTotal = useSearch((state) => state.setTotal);
 
 	const getImages = useCallback(async () => {
 		if (!query) return;
 
 		try {
+			setImages([]);
 			const results = await axios.get(import.meta.env.VITE_GIPHY_API, {
 				params: {
 					q: query,
 					rating: import.meta.env.VITE_GIPHY_RATING,
 					limit: import.meta.env.VITE_GIPHY_LIMIT,
-					offset: page,
+					offset,
 					api_key: import.meta.env.VITE_GIPHY_API_KEY,
 				},
 			});
@@ -29,6 +31,7 @@ const useGiphy = () => {
 						}[]
 					).map((item) => item.images.downsized_medium.url)
 				);
+				setTotal(results.data.pagination.total_count);
 			}
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
@@ -38,7 +41,7 @@ const useGiphy = () => {
 				console.error('Unexpected error:', error);
 			}
 		}
-	}, [query, setImages, page]);
+	}, [query, setImages, offset]);
 
 	return {
 		getImages,
