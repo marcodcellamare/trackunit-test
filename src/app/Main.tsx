@@ -16,6 +16,8 @@ const Main = ({ className }: MainProps) => {
 	const images = useSearch((state) => state.images);
 	const setImages = useSearch((state) => state.setImages);
 	const setTotal = useSearch((state) => state.setTotal);
+	const resetOffset = useSearch((state) => state.resetOffset);
+
 	const setLabel = useLabel((state) => state.setLabel);
 
 	const { getImages } = useGiphy();
@@ -28,6 +30,7 @@ const Main = ({ className }: MainProps) => {
 		setLabel('');
 		setImages([]);
 		setTotal(0);
+		resetOffset();
 		setQuery('');
 	};
 

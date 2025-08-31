@@ -5,6 +5,7 @@ import useSearch from '../stores/useSearch';
 const Search = () => {
 	const setQuery = useSearch((state) => state.setQuery);
 	const setImages = useSearch((state) => state.setImages);
+	const resetOffset = useSearch((state) => state.resetOffset);
 
 	const [value, setValue] = useState('');
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -13,6 +14,7 @@ const Search = () => {
 		if (value) {
 			setQuery(value);
 			setImages([]);
+			resetOffset();
 			setValue('');
 
 			if (inputRef.current) inputRef.current.focus();
